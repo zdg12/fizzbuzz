@@ -1,0 +1,54 @@
+import tkinter as tk
+import random
+
+class BingoHostSystem:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("ビンゴの司会システム Ver.1")
+        self.root.geometry("400x400")
+
+        # ビンゴ番号と履歴リストの初期化
+        self.available_numbers = list(range(1, 76))
+        self.history = []
+
+        # ウィジェットの作成
+        self.number_label = tk.Label(root, text="番号:", font=("Arial", 24))
+        self.number_label.pack(pady=20)
+
+        self.history_label = tk.Label(root, text="履歴:", font=("Arial", 14))
+        self.history_label.pack(pady=10)
+
+        self.history_text = tk.Text(root, height=10, width=30, font=("Arial", 14))
+        self.history_text.pack(pady=10)
+
+        self.draw_button = tk.Button(root, text="番号を引く", command=self.draw_number, font=("Arial", 14))
+        self.draw_button.pack(pady=10)
+
+        self.reset_button = tk.Button(root, text="リセット", command=self.reset_game, font=("Arial", 14))
+        self.reset_button.pack(pady=10)
+
+    def draw_number(self):
+        if self.available_numbers:
+            number = random.choice(self.available_numbers)
+            self.available_numbers.remove(number)
+            self.history.append(number)
+
+            # 選ばれた番号と履歴の更新
+            self.number_label.config(text=f"番号: {number}")
+            self.history_text.insert(tk.END, f"{number}\n")
+            self.history_text.yview(tk.END)  # 最新の履歴にスクロール
+        else:
+            self.number_label.config(text="すべての番号が選ばれました！")
+
+    def reset_game(self):
+        # リセットして、新しいゲームを開始する
+        self.available_numbers = list(range(1, 76))
+        self.history.clear()
+        self.number_label.config(text="番号:")
+        self.history_text.delete(1.0, tk.END)
+
+# Tkinterアプリケーションの起動
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = BingoHostSystem(root)
+    root.mainloop()
