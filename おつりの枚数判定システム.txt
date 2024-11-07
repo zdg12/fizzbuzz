@@ -1,0 +1,28 @@
+def calculate_change(n, x):
+    # 日本のコインの種類（高額から順に並べる）
+    coins = [500, 100, 50, 10]
+    change = n - x  # おつりの総額
+
+    if change < 0:
+        print("支払額が商品価格よりも少ないため、おつりはありません。")
+        return
+
+    print(f"おつりの総額: {change}円")
+    coin_count = {}
+
+    for coin in coins:
+        count, change = divmod(change, coin)
+        coin_count[coin] = count
+
+    # 結果表示
+    for coin, count in coin_count.items():
+        if count > 0:
+            print(f"{coin}円コイン: {count}枚")
+
+# ユーザー入力
+try:
+    n = int(input("支払い金額を入力してください（円）: "))
+    x = int(input("商品価格を入力してください（円）: "))
+    calculate_change(n, x)
+except ValueError:
+    print("無効な入力です。整数で金額を入力してください。")
